@@ -1,89 +1,181 @@
-const addBtn = document.querySelector('#new-toy-btn')
-const toyForm = document.querySelector('.container')
-let addToy = false
+const addBtn = document.querySelector('#new-bread-btn')
+const breadForm = document.querySelector('.container')
+let addbread = false
 
 // YOUR CODE HERE
 
 addBtn.addEventListener('click', () => {
   // hide & seek with the form
-  addToy = !addToy
-  if (addToy) {
-    toyForm.style.display = 'block'
+  addbread = !addbread
+  if (addbread) {
+    breadForm.style.display = 'block'
   } else {
-    toyForm.style.display = 'none'
+    breadForm.style.display = 'none'
   }
 })
 
 
-function fetchToys(){
-  fetch('http://localhost:3000/toys')
+function fetchBreads(){
+  fetch('http://localhost:3000/breads')
   .then(resp => resp.json())
-  .then(renderToys)
+  .then(renderBreads)
 }
 
+function fetchComments(){
+  fetch('http://localhost:3000/comments')
+  .then(resp => resp.json())
+  .then(renderComments)
+}
 
-const toyCollection = document.getElementById('toy-collection')
-function renderToys(toys) {
-  toyCollection.innerHTML = ""
-  toys.forEach(function (toy) {
-    toyCollection.innerHTML += `
-   <div class="card" data-id=${toy.id}>
-        <h2>${toy.name}</h2>
-        <img src="${toy.image}" class="toy-avatar" />
-        <p>${toy.likes} Likes</p>
-        <button class="like-btn">Like <3</button>
-        <button class="delete-btn">Delete</button>
-   </div>
+// breads[0].comments[0].content
+//  <p>"${bread.comments[0].content}"</p>
+const breadCollection = 
+document.getElementById('bread-collection')
+function renderBreads(breads) {
+  
+  breadCollection.innerHTML = ""
+  breads.forEach(function (bread) {
+
+    console.log(bread)
+    breadCollection.innerHTML += `
+    
+    <div class="flip-card" data-id=${bread.id}>
+    
+    <div class="flip-card-inner">
+ 
+      <div class="flip-card-front">
+      <img src="${bread.imgurl}" class="bread-avatar" />
+      <h2>${bread.name}</h2>
+      <p>${bread.breadtype}</p>
+      </div>
+      <div class="flip-card-back">
+      <h3> <u> Previous Comments </u> </h3>
+       <p>${breadcomments(bread).join("")}</p>
+   
+      <button class="like-btn">bread!</button>
+      <button class="delete-btn">bread?</button>
+      </div>
+    </div>
+  </div>
   `
+
   })
+  
+function breadcomments(bread) {
+
+  return bread.comments.map(function (comment)
+  { 
+    return `<p>${comment.content}</p>`
+  }
+  )} 
+
+
+  // breads.forEach(function (bread) {
+  //   i = 0
+  //   console.log(bread.comments[0].content)
+  //   document.getElementsByClassName('flip-card-back').innerHTML = `<p>"${bread.comments[0].content}"</p>`
+  
+  //   i++
+  // })
 }
 
-fetchToys()
 
-const addToyForm = document.querySelector('.add-toy-form')
-addToyForm.addEventListener('submit', function (event) {
-  fetch('http://localhost:3000/toys/', {
+
+fetchBreads()
+// fetchComments()
+
+const addbreadForm = document.querySelector('.add-bread-form')
+addbreadForm.addEventListener('submit', function (event) {
+  fetch('http://localhost:3000/breads/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      name: `${event.target.name.value}`,
-      image: `${event.target.image.value}`,
-      likes: 0
+      name: event.target.name.value,
+      imgurl: event.target.imgurl.value,
+      breadtype: event.target.breadtype.value
+   
+      
     })
   })
     .then(resp => resp.json())
-    .then(renderToys)
+    .then(renderBreads)
 })
 
 
-toyCollection.addEventListener('click', function (event) {
-  let likebutton = event.target.className === "like-btn"
+const addcommentForm = document.querySelector('.add-comment-form')
+addbreadForm.addEventListener('submit', function (event) {
+  fetch('http://localhost:3000/comments/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      content: `${event.target.content.value}`
+      
+    })
+  })
+    .then(resp => resp.json())
+    .then(renderBreads)
+})
+
+
+
+
+  
+
+
+breadCollection.addEventListener('click', function (event) {
+  event.preventDefault()
+  
+  let commentbutton = event.target.className === "like-btn"
   let delbutton = event.target.className === "delete-btn"
-  if (likebutton) {
-    let id = event.target.parentElement.dataset.id
-    let like = event.target.previousElementSibling
-    let likeCount = parseInt(event.target.previousElementSibling.innerText)
-    like.innerText = `${++likeCount} likes`
-fetch(`http://localhost:3000/toys/${id}`, {
-      method: 'PATCH',
+  if (commentbutton) {
+    alert('hi!')
+    let id = event.target.parentElement.parentElement.parentElement.dataset.id
+    back = document.querySelector('.flip-card-back')
+    back.innerText = Comments.all}
+
+// break
+
+// fetch(`http://localhost:3000/breads/${id}`, {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         name: name
+//       })
+//     })
+//     .then(response => response.json())
+//     .then(renderBreads)
+//   }
+
+  else if (event.target.className === "delete-btn") {
+    event.preventDefault()
+    let id = event.target.parentElement.parentElement.parentElement.dataset.id
+    alert("Task failed successfully!")
+
+    fetch(`http://localhost:3000/breads/${id}`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        likes: likeCount
-      })
     })
-    .then(response => response.json())
+    .then(resp => resp.json)
+    .then(fetchBreads)
   }
 
-  else if (delbutton) {
-    let id = event.target.parentElement.dataset.id
-    fetch(`http://localhost:3000/toys/${id}`, {
-      method: 'DELETE'
-    })
-    .then(response => response.json())
-    .then(fetchToys)
-  }
+
+
 })
+
+function renderComments(comments) {
+  breadCollection.innerHTML = ""
+ comments.forEach(function (bread) {
+    breadCollection.innerHTML += `<p>"${bread.comments[0].content}"</p>`  })}
+
+    renderComments()
+
+
