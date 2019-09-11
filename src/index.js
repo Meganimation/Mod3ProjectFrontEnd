@@ -1,11 +1,16 @@
 const addBtn = document.querySelector('#new-bread-btn')
 const breadForm = document.querySelector('.container')
+const breadCollection = document.getElementById('bread-collection')
+
+
+
+
+
+
+
 let addbread = false
-
-// YOUR CODE HERE
-
 addBtn.addEventListener('click', () => {
-  // hide & seek with the form
+
   addbread = !addbread
   if (addbread) {
     breadForm.style.display = 'block'
@@ -15,74 +20,63 @@ addBtn.addEventListener('click', () => {
 })
 
 
-function fetchBreads(){
+function fetchBreads()  {
   fetch('http://localhost:3000/breads')
   .then(resp => resp.json())
   .then(renderBreads)
 }
 
-function fetchComments(){
+function fetchComments()  {
   fetch('http://localhost:3000/comments')
   .then(resp => resp.json())
-  .then(renderComments)
+  .then(renderBreads)
 }
+
 
 // breads[0].comments[0].content
 //  <p>"${bread.comments[0].content}"</p>
-const breadCollection = 
-document.getElementById('bread-collection')
+
 function renderBreads(breads) {
-  
-  breadCollection.innerHTML = ""
-  breads.forEach(function (bread) {
-
-    console.log(bread)
-    breadCollection.innerHTML += `
-    
+   breadCollection.innerHTML = ""
+   breads.forEach(function (bread) {
+   console.log(bread)
+   breadCollection.innerHTML += `
     <div class="flip-card" data-id=${bread.id}>
-    
     <div class="flip-card-inner">
- 
-      <div class="flip-card-front">
-      <img src="${bread.imgurl}" class="bread-avatar" />
-      <h2>${bread.name}</h2>
-      <p>${bread.breadtype}</p>
-      </div>
-      <div class="flip-card-back">
-      <h3> <u> Previous Comments </u> </h3>
-       <p>${breadcomments(bread).join("")}</p>
-   
-      <button class="like-btn">bread!</button>
-      <button class="delete-btn">bread?</button>
-      </div>
+    <div class="flip-card-front">
+    <img src="${bread.imgurl}" class="bread-avatar" />
+    <h2>${bread.name}</h2>
+    <p>${bread.breadtype}</p>
     </div>
-  </div>
+    <div class="flip-card-back">
+    <h3> <u> Previous Comments </u> </h3>
+    <p>${breadcomments(bread).join("")}</p>
+   
+    <button class="add-btn">Add a Comment!</button>
+    <button class="delete-btn">Delete Bread?</button>
+    </div>
+    </div>
+    </div>
   `
-
   })
-  
-function breadcomments(bread) {
 
+
+
+  
+  function breadcomments(bread)   {
   return bread.comments.map(function (comment)
   { 
-    return `<p>${comment.content}</p>`
-  }
-  )} 
-
-
-  // breads.forEach(function (bread) {
-  //   i = 0
-  //   console.log(bread.comments[0].content)
-  //   document.getElementsByClassName('flip-card-back').innerHTML = `<p>"${bread.comments[0].content}"</p>`
-  
-  //   i++
-  // })
+    for (i = 0; i < comment.content.length; i++)
+     return `<li><button class="butty" data-id=${comment.id}> - ${comment.content}</button></li>`
+  })
+ } 
 }
 
 
-
 fetchBreads()
-// fetchComments()
+fetchComments()
+
+
 
 const addbreadForm = document.querySelector('.add-bread-form')
 addbreadForm.addEventListener('submit', function (event) {
@@ -94,9 +88,7 @@ addbreadForm.addEventListener('submit', function (event) {
     body: JSON.stringify({
       name: event.target.name.value,
       imgurl: event.target.imgurl.value,
-      breadtype: event.target.breadtype.value
-   
-      
+      breadtype: event.target.breadtype.value  
     })
   })
     .then(resp => resp.json())
@@ -112,13 +104,12 @@ addbreadForm.addEventListener('submit', function (event) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      content: `${event.target.content.value}`
-      
+      content: `${event.target.content.value}`   
     })
   })
     .then(resp => resp.json())
     .then(renderBreads)
-})
+  })
 
 
 
@@ -129,53 +120,133 @@ addbreadForm.addEventListener('submit', function (event) {
 breadCollection.addEventListener('click', function (event) {
   event.preventDefault()
   
-  let commentbutton = event.target.className === "like-btn"
-  let delbutton = event.target.className === "delete-btn"
+  const commentbutton = event.target.className === "add-btn"
+  const delbutton = event.target.className === "delete-btn"
+  const newbutton = event.target.className === "butty"
+
   if (commentbutton) {
-    alert('hi!')
-    let id = event.target.parentElement.parentElement.parentElement.dataset.id
-    back = document.querySelector('.flip-card-back')
-    back.innerText = Comments.all}
+    const backtext = document.querySelector('.flip-card-back')
+    var person = prompt("Please leave a useless comment.", "Useless comment.");
 
-// break
+     if (person == null || person == "")  {
+      cancel 
+    } 
+       else {
+        txt = "Your comment '" + person + "' is almost appreciated.";
+    }
+        txtalert =alert(txt)
+         postComments(person)
+  }
 
-// fetch(`http://localhost:3000/breads/${id}`, {
-//       method: 'PATCH',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         name: name
-//       })
-//     })
-//     .then(response => response.json())
-//     .then(renderBreads)
-//   }
 
-  else if (event.target.className === "delete-btn") {
-    event.preventDefault()
-    let id = event.target.parentElement.parentElement.parentElement.dataset.id
-    alert("Task failed successfully!")
+  if (event.target.className === "butty") 
+     {
+       event.preventDefault()
+       console.log('hi!') 
+       var person = prompt("Hit Enter to Update the comment, or Cancel to Delete", "Enter Here");
 
-    fetch(`http://localhost:3000/breads/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+   if (person == null || person == "") {
+   txt = "Okay inabit m8."
+   let id = event.target.dataset.id
+     fetch(`http://localhost:3000/comments/${id}`, {
+     method: 'DELETE',
+     headers: {
+    'Content-Type': 'application/json',
+    },
     })
     .then(resp => resp.json)
     .then(fetchBreads)
   }
+   else {
+    txt = "Your comment '" + person + "' is almost appreciated.";
+  }
+   updateComments(person)
+}
+
+
+    else if (event.target.className === "delete-btn") {
+      event.preventDefault()
+     
+      let id = event.target.parentElement.parentElement.parentElement.dataset.id
+        if (id < 11) {
+        alert('You cannot delete other peoples posts!') }
+      else {
+      alert("Task failed successfully!")
+
+      fetch(`http://localhost:3000/breads/${id}`, {
+      method: 'DELETE',
+      headers: {
+      'Content-Type': 'application/json',
+      },
+    })
+    .then(resp => resp.json)
+    .then(fetchBreads)
+  }}
 
 
 
 })
 
-function renderComments(comments) {
-  breadCollection.innerHTML = ""
- comments.forEach(function (bread) {
-    breadCollection.innerHTML += `<p>"${bread.comments[0].content}"</p>`  })}
 
-    renderComments()
+
+
+    function openForm() {
+      document.getElementById("myForm").style.display = "block";
+    }
+    
+    function closeForm() {
+      document.getElementById("myForm").style.display = "none";
+    }
+
+
+  if (person == null || person == "") {
+    txt = "Okay inabit m8.";
+  } else {
+    txt = "Your comment '" + person + "' is almost appreciated.";
+  }
+  txtalert =alert(txt)
+  postComments(person)
+  
+  
+
+
+function updateComments(person) {
+ // let id = event.target.parentElement.parentElement.parentElement.dataset.id
+    
+  let id = event.target.dataset.id
+
+  return fetch(`http://localhost:3000/comments/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      content: person,   
+    })
+  })
+    .then(resp => resp.json())
+    .then(fetchBreads)
+
+}
+
+
+
+function postComments(person) {
+  let id = event.target.parentElement.parentElement.parentElement.dataset.id
+ 
+   return fetch(`http://localhost:3000/comments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      },
+    body: JSON.stringify({
+    bread_id: id,
+    content: person,   
+     })
+     })
+    .then(resp => resp.json)
+    .then(fetchBreads)
+}
 
 
