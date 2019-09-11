@@ -87,11 +87,15 @@ button:hover {
   height: auto;
   display: none;
   background: #aa7539;
-  opacity: .50;
+  opacity: .75;
 }
 
 .add-bread-form {
-  width: 100%
+  width: 100%;
+  font-size: 28px;
+  position: center;
+  align-self: center;
+  text-align: center;
 }
 
 .submit {
@@ -119,8 +123,9 @@ button:hover {
   height: 2rem;
   width: 60%;
   font-size: 18px;
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 3px;
+
 }
 
 
@@ -137,7 +142,7 @@ button:hover {
   
  
   margin: 1rem 1rem;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 8px 18px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
 }
 
@@ -147,7 +152,7 @@ button:hover {
   width: 100%;
   height: 100%;
   text-align: center;
-  transition: transform 0.8s;
+  transition: transform 0.4s;
   transform-style: preserve-3d;
 }
   
@@ -177,7 +182,7 @@ button:hover {
   color: #523800;
 }
 
-/* Style the back side */
+
 .flip-card-back {
   background-color: #a5720585;
   color: white;
@@ -185,4 +190,14 @@ button:hover {
 }
 
 
-`
+.butty {
+  position: relative;
+  background-color: #a57205;
+  border: 1px;
+  border-radius: 1px;
+  height: 1rem;
+  width: max-content;
+  color: rgb(243, 230, 219);
+  font-size: 12px;
+  justify-self: center;
+}
