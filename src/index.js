@@ -2,7 +2,8 @@ const addBtn = document.querySelector('#new-bread-btn')
 const breadForm = document.querySelector('.container')
 const breadCollection = document.getElementById('bread-collection')
 
-
+alert('Hi!')
+alert('Welcome to the most pointless application in the world! See if you can find all 7 easter eggs!')
 
 
 
@@ -31,21 +32,25 @@ function fetchComments()  {
   .then(resp => resp.json())
   .then(renderBreads)
 }
-
+fetchBreads()
+fetchComments()
 
 // breads[0].comments[0].content
 //  <p>"${bread.comments[0].content}"</p>
 
 function renderBreads(breads) {
    breadCollection.innerHTML = ""
+   if (breads === null) {
+     fetchBreads()
+   }
    breads.forEach(function (bread) {
    console.log(bread)
    breadCollection.innerHTML += `
     <div class="flip-card" data-id=${bread.id}>
     <div class="flip-card-inner">
     <div class="flip-card-front">
-    <img src="${bread.imgurl}" class="bread-avatar" />
-    <h2>${bread.name}</h2>
+    <img src="${bread.imgurl}" class="bread-avatar bread-img-${bread.id}" />
+    <h2 class="bread-name" data-name=${bread.id}>${bread.name}</h2>
     <p>${bread.breadtype}</p>
     </div>
     <div class="flip-card-back">
@@ -54,10 +59,13 @@ function renderBreads(breads) {
    
     <button class="add-btn">Add a Comment!</button>
     <button class="delete-btn">Delete Bread?</button>
+    <button class="breadname" data-id=${bread.id}>Reverse Bread Name?</button>
+    <button class="bread-image" data-id=${bread.id}>Add image to favorites?</button>
     </div>
     </div>
     </div>
   `
+ 
   })
 
 
@@ -73,14 +81,16 @@ function renderBreads(breads) {
 }
 
 
-fetchBreads()
-fetchComments()
+
 
 
 
 const addbreadForm = document.querySelector('.add-bread-form')
 addbreadForm.addEventListener('submit', function (event) {
+ // e.preventDefault()
+ 
   fetch('http://localhost:3000/breads/', {
+    
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -143,7 +153,7 @@ breadCollection.addEventListener('click', function (event) {
      {
        event.preventDefault()
        console.log('hi!') 
-       var person = prompt("Hit Enter to Update the comment, or Cancel to Delete", "Enter Here");
+       var person = prompt("Hit Enter to Update the comment, or Cancel to Delete", 'Comment');
 
    if (person == null || person == "") {
    txt = "Okay inabit m8."
@@ -199,13 +209,7 @@ breadCollection.addEventListener('click', function (event) {
     }
 
 
-  if (person == null || person == "") {
-    txt = "Okay inabit m8.";
-  } else {
-    txt = "Your comment '" + person + "' is almost appreciated.";
-  }
-  txtalert =alert(txt)
-  postComments(person)
+
   
   
 
@@ -248,5 +252,187 @@ function postComments(person) {
     .then(resp => resp.json)
     .then(fetchBreads)
 }
+// This works but is messy.
+
+// breadCollection.addEventListener('click', function (event) {
+//     const clickedOnBreadName = event.target.className === "breadname"
+//     console.log(event.target)
+//     if (clickedOnBreadName === true) {       
+//     debugger
+//       let id = event.target.dataset.id
+      
+//       let strArr = event.target.parentElement.parentElement.children[0].children[1].innerText.split("");
+//       let stir = strArr.reverse().join("")
+//       console.log(stir)
+//       return fetch(`http://localhost:3000/breads/${id}`, {
+//         method: 'PATCH',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Accept': 'application/json'
+//         },
+//         body: JSON.stringify({
+//           name: stir,   
+//         })
+//       })
+//       .then(resp => resp.json)
+//       .then(fetchBreads)
+//     }
+//    })
+
+// This works but can be buggy due to id's 
+
+// breadCollection.addEventListener('click', function (event) {
+//   const clickedOnBreadName = event.target.className === "breadname"
+//   console.log(event.target)
+//   if (clickedOnBreadName === true) {       
+
+//     let id = event.target.dataset.id
+//     x = document.querySelectorAll('.bread-name')
+//     debugger
+//     breadName = x[id - 1].innerText.split("");
+
+//     let stir = breadName.reverse().join("")
+//      console.log(stir)
+
+
+//     return fetch(`http://localhost:3000/breads/${id}`, {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Accept': 'application/json'
+//       },
+//       body: JSON.stringify({
+//         name: stir,   
+//       })
+//     })
+//     .then(resp => resp.json)
+//     .then(fetchBreads)
+//   }
+//  })
+
+
+
+
+
+
+
+// breadCollection.addEventListener('click', function (event) {
+//   const clickedOnBreadName = event.target.className === "breadname"
+//   console.log(event.target)
+//   if (clickedOnBreadName === true) {       
+
+//     let id = event.target.dataset.id
+//     x = document.querySelectorAll('.bread-name')
+//     debugger
+//     breadName = x[id - 1].innerText.split("");
+
+//     let stir = breadName.reverse().join("")
+//      console.log(stir)
+
+
+//     return fetch(`http://localhost:3000/breads/${id}`, {
+//       method: 'PATCH',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'Accept': 'application/json'
+//       },
+//       body: JSON.stringify({
+//         name: stir,   
+//       })
+//     })
+//     .then(resp => resp.json)
+//     .then(fetchBreads)
+//   }
+//  })
+
+
+
+// YESSS D0ne!
+
+
+breadCollection.addEventListener('click', function (event) {
+
+  const clickedOnBreadName = event.target.className === "breadname"
+  console.log(event.target)
+  if (clickedOnBreadName === true) {       
+    let id = event.target.dataset.id
+      updateBreadName = document.querySelector(`[data-name="${id}"]`);
+         x = updateBreadName.innerText.split(""); 
+    console.log(updateBreadName)
+         let reverseName = x.reverse().join("")
+    console.log(reverseName)
+  return fetch(`http://localhost:3000/breads/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        name: reverseName,   
+      })
+    })
+    .then(resp => resp.json)
+    .then(fetchBreads)
+  }
+
+ 
+})
+
+
+breadCollection.addEventListener('click', function (event) {
+
+breadImage = document.querySelector('.bread-image');
+
+const clickedOnFav = event.target.className === 'bread-image'
+if (clickedOnFav === true) {
+  let id = event.target.dataset.id
+favBread = document.querySelector(`.bread-img-${id}`);
+console.log(id)
+x = favBread.src
+x = 'https://shop.whitehousehistory.org/media/catalog/product/t/r/trump_egg_gold_shop.png'
+y = document.querySelector('#new-image')
+y.src = favBread.src
+}
+
+console.log(clickedOnFav)
+})
+
+// function addToFavs {
+//  favImage = document.querySelector(`[data-image="${imgurl}"]`);
+// debugger
+// }
+
+
+
+
+marq = document.querySelector('.marquee')
+marq.addEventListener('click', function (event) {
+clickedOnMarq = event.target.className === 'marquee'
+document.querySelector('.marquee')
+if (clickedOnMarq === true) {
+  //let id = event.target.dataset.id
+replaceImage = document.querySelector('#new-image')
+replaceImage.src = 'https://shop.whitehousehistory.org/media/catalog/product/t/r/trump_egg_gold_shop.png'
+}
+if (replaceImage.src === 'https://shop.whitehousehistory.org/media/catalog/product/t/r/trump_egg_gold_shop.png') 
+replaceImage.addEventListener('click', function (event) {
+  easterEggTime()
+})
+
+})
+
+
+
+
+//// EASTER EGG TIME YAYA
+
+function easterEggTime() {
+  alert('Nice one m8!')
+
+
+
+
+}
+
 
 

@@ -53,3 +53,8 @@ Dead Code --->
 
 -------------------------------------
 
+//       let id = event.target.dataset.id
+      
+//       let strArr = event.target.parentElement.parentElement.children[0].children[1].innerText.split("");
+//       let stir = strArr.reverse().join("")
+//       console.log(stir)

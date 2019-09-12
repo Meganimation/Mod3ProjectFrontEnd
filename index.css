@@ -201,3 +201,11 @@ button:hover {
   font-size: 12px;
   justify-self: center;
 }
+
+.checked {
+  color: orange;
+}
+
+
+
+
