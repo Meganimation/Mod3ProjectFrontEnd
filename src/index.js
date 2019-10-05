@@ -3,7 +3,7 @@ const breadForm = document.querySelector('.container')
 const breadCollection = document.getElementById('bread-collection')
 
 alert('Hi!')
-alert('Welcome to the most pointless application in the world! See if you can find all 7 easter eggs!')
+alert('Welcome to the most pointless application in the world! See if you can find all 7 easter eggs')
 
 
 
@@ -361,6 +361,8 @@ breadCollection.addEventListener('click', function (event) {
     console.log(updateBreadName)
          let reverseName = x.reverse().join("")
     console.log(reverseName)
+
+    
   return fetch(`http://localhost:3000/breads/${id}`, {
       method: 'PATCH',
       headers: {
@@ -427,10 +429,7 @@ replaceImage.addEventListener('click', function (event) {
 //// EASTER EGG TIME YAYA
 
 function easterEggTime() {
-  alert('Nice one m8!')
-
-
-
+  alert('Look at the bottom of the screen.')
 
 }
 
