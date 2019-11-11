@@ -135,44 +135,42 @@ breadCollection.addEventListener('click', function (event) {
         txt = "Your comment '" + person + "' is almost appreciated.";
     }
         txtalert =alert(txt)
-         postComments(person)
+          postComments(person)
   }
 
 
   if (event.target.className === "butty") 
-     {
-       event.preventDefault()
-       console.log('hi!') 
-       var person = prompt("Hit Enter to Update the comment, or Cancel to Delete", "Enter Here");
+      {
+        event.preventDefault()
+        console.log('hi!') 
+        var person = prompt("Hit Enter to Update the comment, or Cancel to Delete", "Enter Here");
 
-   if (person == null || person == "") {
-   txt = "Okay inabit m8."
-   let id = event.target.dataset.id
-     fetch(`http://localhost:3000/comments/${id}`, {
-     method: 'DELETE',
-     headers: {
+  if (person == null || person == "") {
+  txt = "Okay inabit m8."
+  let id = event.target.dataset.id
+      fetch(`http://localhost:3000/comments/${id}`, {
+      method: 'DELETE',
+      headers: {
     'Content-Type': 'application/json',
     },
     })
     .then(resp => resp.json)
     .then(fetchBreads)
   }
-   else {
+    else {
     txt = "Your comment '" + person + "' is almost appreciated.";
   }
-   updateComments(person)
+    updateComments(person)
 }
 
 
     else if (event.target.className === "delete-btn") {
       event.preventDefault()
-     
       let id = event.target.parentElement.parentElement.parentElement.dataset.id
         if (id < 11) {
         alert('You cannot delete other peoples posts!') }
       else {
       alert("Task failed successfully!")
-
       fetch(`http://localhost:3000/breads/${id}`, {
       method: 'DELETE',
       headers: {
@@ -234,8 +232,7 @@ function updateComments(person) {
 
 function postComments(person) {
   let id = event.target.parentElement.parentElement.parentElement.dataset.id
- 
-   return fetch(`http://localhost:3000/comments`, {
+    return fetch(`http://localhost:3000/comments`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -243,8 +240,8 @@ function postComments(person) {
     body: JSON.stringify({
     bread_id: id,
     content: person,   
-     })
-     })
+      })
+      })
     .then(resp => resp.json)
     .then(fetchBreads)
 }
